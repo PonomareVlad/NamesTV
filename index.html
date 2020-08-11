@@ -26,12 +26,17 @@
             const slidesCount = slides.length;
             let currentSlide = -1;
             let nextSlide = 0;
-            setInterval(() => {
+
+            function showSlide() {
                 nextSlide = slides[currentSlide + 1] ? (currentSlide + 1) : 0;
                 if (slides[nextSlide]) slides[nextSlide].style.setProperty('opacity', 1);
                 if (slides[currentSlide]) slides[currentSlide].style.setProperty('opacity', 0);
                 currentSlide = nextSlide;
-            }, 15000)
+            }
+
+            showSlide();
+
+            setInterval(showSlide, 15000);
         }
 
         function loadImage(src, i) {
