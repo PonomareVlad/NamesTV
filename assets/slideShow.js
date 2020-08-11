@@ -27,17 +27,5 @@ function loadImage(src, i) {
     })
 }
 
-async function init() {
-
-    const slides = await fetch('https://script.google.com/macros/s/AKfycbxOt0XDe9im0w1RYcWl-xs3QnVhw0K9Zwr9-kXDif_t1hTO7MF8/exec', {mode: 'cors'})
-        .then(r => r.json());
-
-    for await (const slide of slides) {
-        await loadImage(slide, slides.indexOf(slide) + 1);
-    }
-
-    runSlideShow();
-
-}
-
-init();
+fetch('https://script.google.com/macros/s/AKfycbxOt0XDe9im0w1RYcWl-xs3QnVhw0K9Zwr9-kXDif_t1hTO7MF8/exec', {mode: 'cors'})
+    .then(r => r.json()).then(slides => slides.map(slide => loadImage(slide, slides.indexOf(slide) + 1))).then(runSlideShow);
