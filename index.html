@@ -9,7 +9,6 @@
         }
 
         body img {
-            --i: 0;
             height: 100vh;
             width: 100vw;
             position: fixed;
@@ -17,26 +16,29 @@
             top: 0;
             object-fit: contain;
             opacity: 0;
-            animation: 5s calc(var(--i) * 5s) steps(1) infinite slideShow;
-        }
-
-        @keyframes slideShow {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
 
     </style>
     <script>
 
+        function runSlideShow() {
+            const slides = document.querySelectorAll('body>img');
+            const slidesCount = slides.length;
+            let currentSlide = -1;
+            let nextSlide = 0;
+            setInterval(() => {
+                nextSlide = slides[currentSlide + 1] ? (currentSlide + 1) : 0;
+                if (slides[nextSlide]) slides[nextSlide].style.setProperty('opacity', 1);
+                if (slides[currentSlide]) slides[currentSlide].style.setProperty('opacity', 0);
+                currentSlide = nextSlide;
+            }, 15000)
+        }
+
         function loadImage(src, i) {
             return new Promise((resolve, reject) => {
                 const img = document.createElement('img');
                 img.onload = () => resolve(true);
-                img.style.setProperty('--i', i);
+                // img.style.setProperty('--i', i);
                 img.src = src;
                 document.body.appendChild(img);
             })
@@ -47,25 +49,15 @@
             const slides = await fetch('https://script.google.com/macros/s/AKfycbxOt0XDe9im0w1RYcWl-xs3QnVhw0K9Zwr9-kXDif_t1hTO7MF8/exec', {mode: 'cors'})
                 .then(r => r.json());
 
-            // const slides = ["https://lh6.googleusercontent.com/AChssAorKBFRWRm6OWNfB9S64wFPC9hKxouxN-F0DgIR2aEBgHVA7k2-D4X_qBKDcid0qtEbjYQfImcx29Hn36XaH1DjWemLL4GYPH61PkhjzX91-jjv8tu6LvtjrThWNm7uvHPcMJElJQNrniIDa_1OwlrFsolPHvHNUsf-9JWZSXOOOYeTMthDqU3dCp80AI7wM73K4YJdYgX6bvulNnopjwkuUo9lO-EnPztYVQ=s1600", "https://lh6.googleusercontent.com/MwOXvTlzmVMvz5vkI7LfqsGKKCfxufIZ7PudANAp2ty2MHvtqBepg_ud9wbYBkzViS2OiYJwdY1rk2Lm9Sjk-JhhRLGn2DjqV-l9pfNQsd1lDKS-ZPJhp-Dik2pYHnI2LE1k7Ll9D10opianoVvMrRHax4WcXCmHz85zqQpnfWNfJ-PLZftUeNUBYurmlyTLJGXqAZ6cSbCGjiqXY8i0Vz4XThoMjpUvYWrfyZ07zw=s1600", "https://lh4.googleusercontent.com/3t354_GBbC1LHVvX7vuuwZ5CyMt69jayXrs-IUvzhobLN7wo81_HoQl_10529MewLDPJ4IAf70fgqIHI2RUFoYlw_IdVurU9kw3zEmrDl63zxoVtfWMriHK1fDBQZzpXQ9J-qkOLL87upZpV0btuUH3SkraoDnltOkoMfIcHtyX1LnbKx2vilzd-3aFcz83BpoMUY1XWYGZHhw8fphW0gfNRG5rtOBM6vTNuB-XfSA=s1600", "https://lh6.googleusercontent.com/pW5wdc9AvuZ56SyLHOyJquRKB7uQ7Iz8gLGY6qvtSGVb08kNLZ1z2A6SScD2Cc9MsgfYuh5YBoT5L-7O5nC-rTHNGex_oM6GKzM-DDqhdWxANbk2ZgGeqx0_HYPFeVo5b7ThIqy3kvUUF0-90BC8CC7hMLvwGTdchCRZMsN71csJ7fyLqAP2juOTf3AbA__XMsyIHFOeHg787qmFxL0VOU-FzaxYiQHnjMWH1ThpMg=s1600", "https://lh4.googleusercontent.com/XRv1VVaPsfVqwAmL62F4QEKWGjnzyRc0EsmVgSQNjspMXoAy7RTqcdXiT6p8VCp0IEg8aUwvyDPvGzyyEXdyCjqWoLxCxqy2ZI73blXL2SdHc4j7AYDQf5XB-Q38S-fAGPhgKZ2mSEznr66H3jhUiuafp9ctZmFJPBuwtiTg_Q1nOcd76DSfnrz-Vu3y7vzEYt1fJh2Z6104IPPiu7Vu79BOgDjwvk1LB1qxonAgmg=s1600", "https://lh5.googleusercontent.com/oVg1mUbYlFB087UOeXMAZdQILW0Qb8cNWceZ0A2p0n9-pLlzxhNKU1GmYR2M0jy4vNMCtRYjzGxeMyhregzbiv8IXihdEz6MiBeH8o6IOL9tn9OiKl2zsT1JkoUT18p40xr7dZjCbwrfpWPD5usPwo2h0onsHEyPbpbZGRDUpuENiv2-oTVF0eHC0TwY3dkov3Es4vSL84o-zwSWk00ahOxBo7RPTdwqfw9b-kAfbg=s1600", "https://lh6.googleusercontent.com/-q0FFbT9eQ8xv0Wr6FhrYYF2SobvB2aHI9bYQvZV0HLazNz8qlSV7IC2SFGqkXEEMkD2qswfX4bqjEQIykyMfGGQnIQrWCltwZVhzYklsSpcRw6y3zaPtokxEWHybnzgrUeD1kMmsxBr07vGSR3NKHJdqTp2VrTyeKmawr6fpXKEIdXytZ6FvDThtWp2K70gaClhbOnDSo8dQpHJmVUbkkys1Zn4kD1ZY93BhjzRFA=s1600", "https://lh4.googleusercontent.com/2b1KY5RXuvnIi_k7Z8nMLAy3ouixmzNfiw7b8oqoMaMvDeOM6M4yusOBPsRx8ygkmxoJtqqzPoF-Grr38SxwL2yhHDhl6eNNaWVuxE9DL0ESvDTHb8IzSVbEmivQDpQDv71nPMZVvS8hjzusBH2JkxHBh42znP8MRAz8v6H36f-VywTqbAntrpQ3kvPBVVIRn_5eAwFtLDy5FRVwdOSGtWXfm4TsPoKWHces4MiXeA=s1600", "https://lh5.googleusercontent.com/rIvmKu3OoBd8hxWZMNaJHqobR9LMS4pd-NByt7C3s82lhqDhYvjOUbBaB7JaaGFHecv8-zRjdBmlwfdJbJNQLmaq1hVwdtgnJGTtRcBXGw8YPCrFUOTumB8JKJZ9NGJx6tyaDnxCGPshxTadttm4lwwl9etm-fY0k8TWl5TkKbQctZ-1Mih5f6JbPFlQRDJenfMkP9-Tp9qoPh7kJxTjmnKtBue7Zu0rKZ8z8M2Vdg=s1600", "https://lh6.googleusercontent.com/y_xO0vcYz-MnAwpUA5BAmpbKsXQLoY-0wxYSjvF1pQFvo0zAzZo7t6lIBCjb6PQ4g8zkiMqaJkha1Z4_sC97dpmjzAD8niIietjm2md3W77ZYhac-PPNgL7Pukk_NL8VLd_iBqXM9ytATjdayFYhZYQnsiOQzY4t2XUt5m-zNdXdX4aYbXtLjZYSdHxHRJskUouchaFtSfGsA8oL4vwxD7mPMbAxlVm8wnR1yn209A=s1600", "https://lh3.googleusercontent.com/douDJb8iuI2_oNOeuhiy8Ciu1q3WO4TcC9zCCLECSNMkSS9yNxG_4WwueeKhEfWN4UpfB4jzyRwzh6gJ42WkyCnDLH3nIndmmZL5z-MjNCUkha1nT7OsLWxQHXLXlCdxCiBOBFXPc-MCifTfEvXW-PgNMQsMG2v5MXZOFmpLsxi0WwmLddUCR3qGKeG4xdgO-wM_CzXrT6Kig76ZJyZGeoww1I_YyIn3epgYAfKJdA=s1600", "https://lh5.googleusercontent.com/7wp0CXiE3yk0-yfYdYW3KFCr-kbE7lbsrw2HfoBQbXMQf2Cr3qQf4J94XQkzwEnyPhj6rEa7SZlfqqh5XvZ-iionvbJxMlJ2_YCkouHVQJlWeFn4d0ohk8FUNSTCxWa0rjngCaqUqu-taiWWRzXraRXyVwhBlkiF_SeEiPFHURT44FVUfyxlJrZqCCWb0uMDAwfuFkH0JHC-YZyOUY1_UGC04PEyy6ZKGW4YC3Kvpg=s1600", "https://lh5.googleusercontent.com/L53A7yVVjVXxv2kr3Dq9H7xv54JzD6IXkKOaQYQCMUIA1FvD99RV2EtCnVNuDHz-iHDBL63wX-yvv_3bmbQxWfVQfs2lKBCM03H0vaLMLFM0_ONKwNvFfR6cMlo5dH0zSYMwkYp_gzvORR1VzsWqa2Om0JnhHfqYVuPmPUfFZgCxcly-bXi65LlVX-iXi-yfCx-VytvaI-0TO7l35aE6CVK6WE63Jc8iA6LOvQFc4A=s1600", "https://lh5.googleusercontent.com/ZRAEsWoMVn4QEFLq9jaoS3D8shvbHSoniSEDpkhANssP6KBAVCXX49oAPCgz0zsLn_7ywhHrW7Ay56I4hYWLVeRbhWzU9KrTtdJlIHxxGJL1R-61qCHuLsOEY8Mk4WfPXYYvVSh60vNx8OgKC67mWq-5C_wrQR-SfkcH7iXrLepna4C1KuLxX9Kr0cYdZNNpmfdEpsm0iiZHcsA3GVGQJgcr4KmjP3vbO8k4KYhcJQ=s1600", "https://lh4.googleusercontent.com/JEnd6vYc4onuaep23g7XrCZzRNwr_dz8C-cbPqQngCbPKJZB4Y7HqKCLsQtBxanto1yQHlrer_afv8z86ROhDTFLDo_1IFRIayP-BLZ9ivc1Dg4jY4CuvMydory_xVFvIe2iS_e0QL6rcYz6vYK2nM58kph0YuGspYRARKHrUTVP4CAawctvXGfYxYcjQLcojORl7UtYnQOZ9n335g3J_TvEUAbBoqllTV8o9PmFgQ=s1600", "https://lh4.googleusercontent.com/VB4TNoywlrJh32mVLQ2tdbnO6a6U7N8hXuqfl6DPqeh9Wc-FcltMdr9E6yUekjtxBTUSUJNrqjOtblFk9DkouwFIk7VfsbmDC5ld2tvkGA5nbrXe6b_a727TbhlgzgilHxXVB6kJ57yUUj2E-lQjQf2D2Ml2rwS_MV6-6ZBD0g_i-NGNskA-u4_0Zgxg8PANdckzlxOLQZQCBsC9vkZT-7EtRYUjL3BKO96dcSwnuw=s1600", "https://lh6.googleusercontent.com/fAP65Qk_yOyHk1-qKe2ESQaBhZ413zRlmre4fM7FlACX3HnJVLwp-D0XhnS68C8HTSgPt2cPTXECF1vcOzYpr0wO6zw9-ZtAj3F4xxo85pC6_P2nXaha8z7nkyQtTNuliL4TUmqKlD25lMW8swaOAWH7lkt7oJX5osFlCpdiuSqbA5pArY9qhqZdzzcziqABfg_WpgV-D6OX-1qW02e5BmoouZkBmVDdljpgsMDa6A=s1600"]
-
             for await (const slide of slides) {
                 await loadImage(slide, slides.indexOf(slide) + 1);
             }
 
-            /*slides.forEach(slide => {
-                const img = document.createElement('img');
-                img.src = slide;
-                document.body.appendChild(img);
-            })*/
+            runSlideShow();
 
         }
 
         init();
-
-        /*const img = document.createElement('img');
-        img.src = 'https://lh3.googleusercontent.com/fAQQ51VGZf-eEkMGVH2-wVxdMvUK7nDD24thb9YLzFaF-PBjJnDu4MDBrK8BRHkR4Mj1DkWBVO6In3__-HzwgPRqzaDcfry4A7t5h5pR-v09KEqiomERSHAM3EkASc5iLkkIZf289uxDMbjZnM614vHsz-Uu5IoX4ucNQrBO0pydq9M9UhqUULbI-FOHA2u6TNLq8BrF2ul9KYyEpLgWLqietlc9nAzt-vthzUIg_w=s1600';
-        document.body.appendChild(img);*/
 
     </script>
 </head>
