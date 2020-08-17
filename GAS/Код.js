@@ -1,5 +1,6 @@
-function doGet() {
-    return downloadPresentation('1u5XbVwXb5uhIyp7GOgAUon3bqej6vm5hwzCZzCUZEbM')
+function doGet(e) {
+    if (!e.parameter.id) return false;
+    return downloadPresentation(e.parameter.id);
 }
 
 function downloadPresentation(id) {
