@@ -27,5 +27,7 @@ function loadImage(src, i) {
     })
 }
 
-fetch('https://script.google.com/macros/s/AKfycbxOt0XDe9im0w1RYcWl-xs3QnVhw0K9Zwr9-kXDif_t1hTO7MF8/exec', {mode: 'cors'})
+function init(id){
+return fetch('https://script.google.com/macros/s/AKfycbxOt0XDe9im0w1RYcWl-xs3QnVhw0K9Zwr9-kXDif_t1hTO7MF8/exec', {mode: 'cors'})
     .then(r => r.json()).then(slides => slides.map(slide => loadImage(slide, slides.indexOf(slide) + 1))).then(runSlideShow);
+}
